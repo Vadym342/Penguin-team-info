@@ -1,0 +1,61 @@
+﻿@model BLLViews.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .stLoginInput {
+        margin-left: 30%;
+        margin-right: 30%;
+    }
+</style>
+<div class="container">
+    <h2 class="text-center">@ViewBag.Title</h2>
+
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal stLoginInput", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4 class="text-center">Create a new account</h4>
+        <hr />
+
+        @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "fg-white" })
+        @Html.LabelFor(m => m.FullName)
+
+        @Html.TextBoxFor(m => m.FullName, new { @class = "cell-12" })
+        <br />
+        @Html.ValidationMessageFor(m => m.ListCities, "", new { @class = "fg-white" })
+        @Html.LabelFor(m => m.ListCities)
+
+        @Html.DropDownListFor(x => x.CityID, new SelectList(Model.ListCities, "Value", "Text"), new { data_role = "select", @class="cell-12" })
+        <br />
+        // @Html.ValidationSummary("", new { @class = "fg-white" })
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "fg-white" })
+        @Html.LabelFor(m => m.Email)
+
+        @Html.TextBoxFor(m => m.Email, new { @class = "cell-12" })
+        <br />
+
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "fg-white" })
+        @Html.LabelFor(m => m.Password)
+
+        @Html.PasswordFor(m => m.Password, new { @class = "cell-12" })
+
+        <br />
+        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "fg-white" })
+        @Html.LabelFor(m => m.ConfirmPassword)
+
+        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "cell-12" })
+
+        <br />
+        <button class="button alert outline cell-12">Register</button>
+
+    }
+</div>
+<script>
+    function SendOnEMail() {
+        alert("A confirmation email has been sent to your email!");
+    }
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "AboutContactUs";
+}
+<style>
+    a {
+        color: white;
+        text-decoration: none;
+    }
+</style>
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
+<div class="text-center">
+    <h1>Contact Pen.Guin</h1>
+    <h4>All information about our team</h4>
+</div>
+<br />
+<br />
+<div class="pos-center stmenu cell-md-9 cell-12">
+    <div class="container">
+        <ul class=" h-menu cell-12">
+            <li class="text-center cell-6 cell-md-3"> @Html.ActionLink("About Us", "About", "Home")</li>
+            <li class="text-center cell-6 cell-md-3">@Html.ActionLink("Carrers", "AboutCarrers", "Home")</li>
+
+            <li class="text-center cell-6 cell-md-3">@Html.ActionLink("Press", "AboutPress", "Home")</li>
+            <li class="text-center cell-6 cell-md-3">@Html.ActionLink("Contact Us", "AboutContactUs", "Home")</li>
+        </ul>
+    </div>
+</div>
+<br />
+<h2 class="text-center">Our offices</h2>
+<br />
+<div class="row container h-center text-center">
+
+    <div class="cell-10 cell-md-4">
+        <div class="card image-header stbordercards">
+            <div class="card-header fg-white"
+                 style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfPWzIUamKMPlQRn1MIMBq8_TfiFSU7A8AErlxokdXrqLS6pSOVQ)">
+                <a href="//www.google.com/maps/place/Ukraine+Rivne+Komp'yuterna+Akademiya+Shah">Click</a>
+            </div>
+            <div class="card-content p-2" style="height:140px;">
+                <p class="fg-gray">Posted on March 03, 2019</p>
+                Our offices in Ukraine, Rivne.
+            </div>
+            <div class="card-footer">
+                <button class="button secondary">Read more information</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cell-10 cell-md-4">
+        <div class="card image-header stbordercards">
+            <div class="card-header fg-white"
+                 style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfPWzIUamKMPlQRn1MIMBq8_TfiFSU7A8AErlxokdXrqLS6pSOVQ)">
+                <a href="//www.google.com/maps/place/Ukraine+Rivne+Komp'yuterna+Akademiya+Shah">Click</a>
+            </div>
+            <div class="card-content p-2" style="height:140px;">
+                <p class="fg-gray">Posted on March 03, 2019</p>
+                Our offices in Ukraine, Lviv.
+            </div>
+            <div class="card-footer text-center">
+                <button class="button secondary">Read more information</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cell-10 cell-md-4">
+        <div class="card image-header stbordercards">
+            <div class="card-header fg-white"
+                 style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfPWzIUamKMPlQRn1MIMBq8_TfiFSU7A8AErlxokdXrqLS6pSOVQ)">
+                <a href="//www.google.com/maps/place/Ukraine+Rivne+Komp'yuterna+Akademiya+Shah">Click</a>
+            </div>
+            <div class="card-content p-2" style="height:140px;">
+                <p class="fg-gray">Posted on March 03, 2019</p>
+                Our offices in Ukraine, Kyiv.
+            </div>
+            <div class="card-footer">
+                <button class="button secondary">Read more information</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+
+<h2 class="text-center">Developers contacts</h2>
+<div class="container h-center">
+    <div class="text-center">
+
+        <ul data-role="listview" data-view="icons-medium">
+
+            <li class="text-center" data-caption="GitHub our developers">
+                <ul>
+                    <li class="cell-4" data-icon="<span class='mif-github' style='color: darkred'>"><a href="https://github.com/AnonimVadim">Vadim Boyarchuk</a></li>
+                    <li class="cell-4" data-icon="<span class='mif-github'  style='color: darkred'>"> <a href="https://github.com/Andriy22">Andriy Alexandruk</a></li>
+                </ul>
+            </li>
+
+            <li class="text-center" data-caption="E-mail our developers">
+                <ul>
+                    <li class="cell-4" data-icon="<span class='mif-google' style='color: darkred'>" data-caption="Vadim Boyarchuk">vadimca1.boyarchuc@gmail.com</li>
+                    <li class="cell-4" data-icon="<span class='mif-google' style='color: darkred'>" data-caption="Andriy Alexandruk">istep.andriy@gmail.com</li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+
+</div>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaXZhbnR5bW8iLCJhIjoiY2p0NXhiZXlsMGI5ajQ0cXprNHl1YmI5ciJ9.RbgpQDG-e3cQlkXMPVA_3Q';
+
+
+    var map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
+        center: ["26.251265", "50.627868"],
+        zoom: 12
+    });
+    var geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+
+    });
+</script>

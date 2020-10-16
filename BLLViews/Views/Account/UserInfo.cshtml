@@ -1,0 +1,127 @@
+﻿@model BLLViews.Models.UserInfoModel
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <style>
+    .table-container {
+  width: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}</style>
+
+    <div class="container">
+        <h3 class="text-center text-bold">@Model.user.FullName</h3>
+        <div class="row">
+            <div class="img-container cell-2">
+                <div data-role="panel" data-width="300" data-height="300">
+                    <img style="width:280px; height:280px" src="@Model.AvaPath">
+                    <div class="image-overlay op-black"></div>
+                </div>
+                @if (Model.user.Id == User.Identity.GetUserId())
+                {
+                  @Html.ActionLink("EDIT", "Index", "Manage",null, htmlAttributes: new { @class = "button alert outline cell-12" })
+                }
+            </div>
+            <div class="cell-9">
+                <br />
+                <h3>Statistic</h3>
+                <hr />
+                <div class="row">
+                    <div class="cell-12 cell-md-2">
+                        <p style="font-size:20px">City: @Model.user.City.Name</p>
+                        <p style="font-size:20px">Rating: @Model.user.Raiting @*<input data-role="rating" data-star-color="red" data-static="true" data-value="@Model.user.Raiting">*@</p>
+                    </div>
+                    <div class="cell-md-3 cell-12 ">
+                        <p style="font-size:20px">count of projects : @Model.jobs.Count</p>
+                        <p style="font-size:20px"> projects subscribeds : @Model.Subs.Count</p>
+                    </div>
+                    <div class="cell-md-7 cell-12 ">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <p style="font-size:20px">Phone : @Model.user.PhoneNumber</p>
+                            <p style="font-size:20px">Email : @Model.user.Email</p>
+                        }
+                        else
+                        {
+                            <p style="font-size:20px">Phone : hidden</p>
+                            <p style="font-size:20px">Email : hidden</p>
+                        }
+
+                    </div>
+
+                </div>
+                <hr />
+                <br />
+                <br />
+                <h3>Activity</h3>
+                <hr />
+                <div>
+                    <ul class="bottom text-center" data-role="tabs" data-expand="true">
+                        <li class="bg-darkRed fg-white fg-yellow-hover"><a href="#MyJobs">My Jobs</a></li>
+                        <li class="bg-darkRed fg-white fg-yellow-hover"><a href="#MySubs">Subscribet</a></li>
+                    </ul>
+                    <div class="border bd-default no-border-top p-2">
+                        <div id="MyJobs">
+                            <table class="table table-container"
+                                   data-role="table"
+                                   data-show-search="false"
+                                   data-show-rows-steps="false"
+                                   data-rows="5"
+                                   data-show-table-info="false">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Salary</th>
+                                        <th>Date</th>
+                                        <th>More</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var el in Model.jobs)
+                                    {
+                                        <tr>
+                                            <td>@el.Name</td>
+                                            <td>@el.Salary</td>
+                                            <td>@el.Date</td>
+                                            <td>@Html.ActionLink("GO", "JobView", "Home", new { id = el.ID }, new { @class = "button alert outline cell-12" })</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="MySubs">
+                            <table class="table table-container"
+                                   data-role="table"
+                                   data-show-search="false"
+                                   data-show-rows-steps="false"
+                                   data-rows="5"
+                                   data-show-table-info="false">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Salary</th>
+                                        <th>Date</th>
+                                        <th>More</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var el in Model.Subs)
+                                    {
+                                        <tr>
+                                            <td>@el.Name</td>
+                                            <td>@el.Salary</td>
+                                            <td>@el.Date</td>
+                                            <td>@Html.ActionLink("GO", "JobView", "Home", new { id = el.ID }, new { @class = "button alert outline cell-12" })</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+    </div>

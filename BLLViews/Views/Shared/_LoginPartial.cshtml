@@ -1,0 +1,74 @@
+﻿@model BLLViews.Models.GetUserInfo
+<style>
+   
+</style>
+<aside class="sidebar pos-absolute z-2  bg-black" data-role="sidebar" data-toggle="#sidebar-toggle-2" id="sb2" data-shift=".shifted-content">
+    <br />
+    <br />
+    <br />
+
+    <div class="sidebar-header  bg-black" >
+        <div class="avatar">
+            <img width="100" height="100" src="@Model.ava">
+        </div>
+        <span class="title fg-white">@Model.fullname </span>
+        @*<span class="subtitle fg-white"> 2018 © Sergey Pimenov</span>*@
+    </div>
+
+    <ul class="sidebar-menu">
+
+
+        @using Microsoft.AspNet.Identity
+        @if (Request.IsAuthenticated)
+        {
+            <li class="group-title fg-white"> Main</li>
+
+            <li onmouseover="this.style.backgroundColor='#555';" onmouseout="this.style.backgroundColor='black';">
+                @Html.ActionLink("My jobs", $"UserInfo/{User.Identity.GetUserId()}", "Account", routeValues: null, htmlAttributes: null)
+            </li>
+            <li onmouseover="this.style.backgroundColor='#555';" onmouseout="this.style.backgroundColor='black';">
+                @Html.ActionLink("My Resumes", "MyResumes", "Account", routeValues: null, htmlAttributes: new { title = "Account" })
+            </li>
+            <li onmouseover="this.style.backgroundColor='#555';" onmouseout="this.style.backgroundColor='black';">
+                @Html.ActionLink("Profile", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+
+            <li onmouseover="this.style.backgroundColor='#555';" onmouseout="this.style.backgroundColor='black';">
+                <a href="~/support/MyTickets"> Support</a>
+            </li>
+            <li class="divider fg-red bg-red"></li>
+            if (User.IsInRole("Admin") || User.IsInRole("Support") || User.IsInRole("Banned"))
+            {
+                <li class="group-title fg-white">Pannels</li>
+                if (User.IsInRole("Support"))
+                {
+
+                    <li onmouseover="this.style.backgroundColor='#555';" onmouseout="this.style.backgroundColor='black';"> @Html.ActionLink("Support", "Tickets", "Support", routeValues: null, htmlAttributes: new { title = "Support" })</li>
+                }
+                if (User.IsInRole("Admin"))
+                {
+                    <li onmouseover="this.style.backgroundColor='#555';" onmouseout="this.style.backgroundColor='black';"> @Html.ActionLink("Admin", "Index", "Admin", routeValues: null, htmlAttributes: new { title = "Admin" })</li>
+                }
+
+            }
+
+        }
+        else
+        {
+
+            <li> @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" }) </li>
+            <li> @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) </li>
+
+        }
+
+        <li class="divider fg-red bg-red"></li>
+
+        <li onmouseover="this.style.backgroundColor='#555';" onmouseout="this.style.backgroundColor='black';">
+            @Html.AntiForgeryToken()
+            @Html.ActionLink("Log out", "LogOff", "Account", routeValues: null, htmlAttributes: null)
+        </li>
+    </ul>
+</aside>
+<script>
+
+</script>

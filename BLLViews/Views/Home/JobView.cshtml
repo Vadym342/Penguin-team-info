@@ -1,0 +1,216 @@
+﻿@model BLLViews.Models.JobView
+@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = Model.job.Name;
+}
+
+<style>
+    .table-container {
+        width: 100%;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+</style>
+
+<div class="container">
+    <h3 class="text-center text-bold">@Model.job.Name</h3>
+    <div class="row">
+        <div class="cell-12">
+            <br />
+            <h3 class="text-center">Owner INFO</h3>
+            <hr />
+            <div class="row">
+                <div class="img-container cell-2">
+                    <div data-role="panel" data-width="170" data-height="120">
+                        <img style="width:150px; height:100px" src="@Model.job.UserOwner.AvaPath">
+                        <div class="image-overlay op-black"></div>
+                    </div>
+
+                </div>
+                <div class="cell-12 cell-md-3">
+                    <p style="font-size:20px"><a href="@Url.Action("UserInfo","Account", new {id=Model.job.UserOwner.Id})" class="fg-white">Name: @Model.job.UserOwner.FullName</a></p>
+                    <p style="font-size:20px">Project city: @Model.job.City.Name@*<input data-role="rating" data-star-color="red" data-static="true" data-value="@Model.user.Raiting">*@</p>
+                </div>
+                <div class="cell-md-7 cell-12 ">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <p style="font-size:20px">Phone : @Model.job.UserOwner.PhoneNumber</p>
+                        <p style="font-size:20px">Email : @Model.job.UserOwner.Email</p>
+                    }
+                    else
+                    {
+                        <p style="font-size:20px">Phone : hidden</p>
+                        <p style="font-size:20px">Email : hidden</p>
+                    }
+
+                </div>
+
+            </div>
+            <hr />
+            <div>
+                <br />
+                <h3 class="text-center">DESCRIPTIONS</h3>
+                <hr />
+                <p style="font-size:18px">@Model.job.Description</p>
+            </div>
+            <hr />
+            <br />
+            <br />
+            <h3 class="text-center">ACTIONS</h3>
+            <hr />
+            <div>
+                <ul class="bottom text-center" data-role="tabs" data-expand="true">
+                    <li class="bg-darkRed fg-white fg-yellow-hover"><a href="#MyJobs">Buttons</a></li>
+                    <li class="bg-darkRed fg-white fg-yellow-hover"><a href="#MySubs">Chat</a></li>
+                    @if (Model.job.UserOwner.Id == User.Identity.GetUserId() || User.IsInRole("Admin"))
+                    {
+                        <li class="bg-darkRed fg-white fg-yellow-hover"><a href="#MyResumes">ResumeList</a></li>
+                    }
+
+                </ul>
+                <div class="border bd-default no-border-top p-2">
+                    <div id="MyJobs">
+                        <div class="row">
+                            <button id="btnsub" onclick="Ts1();" class="button cell-md-6 cell-11 outline alert" style="margin-bottom:10px; margin-left:1rem">SUBSCIBE</button>
+
+                            @if (Model.job.Resumes.FirstOrDefault(x => x.own.Id == User.Identity.GetUserId()) != null)
+                            {
+                                <button id="Resum" onclick="SendRes();" class="button cell-md-5 cell-11 outline alert" style="margin-left:1rem; margin-bottom: 10px">REMOVE RESUME</button>
+                            }
+                            else
+                            {
+                                <button id="Resum" onclick="SendRes();" class="button cell-md-5 cell-11 outline alert" style="margin-left:1rem; margin-bottom: 10px">SEND RESUME</button>
+                            }
+                        </div>
+                        @if (Model.job.UserOwner.Id == User.Identity.GetUserId() || User.IsInRole("Admin"))
+                        {
+                            @Html.ActionLink("REMOVE", "RemoveJob", "Home", new { id = Model.job.ID }, htmlAttributes: new { style = "margin-bottom:10px", @class = "button alert outline cell-12" })
+                        }
+                    </div>
+                    <div id="MySubs">
+                        <div id="Chat">
+
+                        </div>
+                    </div>
+                    <div id="MyResumes">
+                        @if (Model.job.UserOwner.Id == User.Identity.GetUserId() || User.IsInRole("Admin"))
+                        {
+                            @Html.Action("GetResumes", new { id = Model.job.ID })
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@*@if (Model.job.UserOwner.Id == User.Identity.GetUserId() || User.IsInRole("Admin"))
+{
+    @Html.ActionLink("REMOVE", "Index", "Manage", null, htmlAttributes: new { @class = "button alert outline cell-12" })
+}*@
+<script>
+    
+    $(function() {
+       UpdateChat(); setInterval(UpdateChat, 150000);
+  });
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaXZhbnR5bW8iLCJhIjoiY2p0NXhiZXlsMGI5ajQ0cXprNHl1YmI5ciJ9.RbgpQDG-e3cQlkXMPVA_3Q';
+
+
+    var map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
+        center: ["26.251265","50.627868"],
+        zoom: 12
+    });
+    var geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+
+    });
+
+ 
+    function UpdateChat() {
+        $.ajax({
+            url: '@Url.Action("GetMSG","Home")/'+@Model.job.ID,
+            contentType: 'html',
+            success: function (objOperations) {
+                $("#Chat").html(objOperations);
+            },
+              beforeSend: function () {
+
+                    LoaderJS();
+                },
+                complete: function () {
+
+                    HideLoaderJS();
+                },
+
+
+        });
+    }
+
+    function Ts1() {
+          UpdateChat();
+        $.ajax({
+            url: '@Url.Action("SubscribeManager","Home")/@Model.job.ID',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (objOperations) {
+
+                var res = objOperations;
+                if (res == true) {
+                    $("#btnsub").text("SUBSCIBED");
+                    $("#btnsub").addClass("Subs");
+                    $("#btnsub").removeClass("Alert");
+                }
+                if (res == false) {
+                    $("#btnsub").text("SUBSCIBE");
+                    $("#btnsub").removeClass("Subs");
+                       $("#btnsub").addClass("Alert");
+                }
+            },
+
+              beforeSend: function () {
+
+                    LoaderJS();
+                },
+                complete: function () {
+
+                    HideLoaderJS();
+                },
+
+        });
+    };
+      function SendRes() {
+          UpdateChat();
+        $.ajax({
+            url: '@Url.Action("SendResume","Home")/@Model.job.ID',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (objOperations) {
+
+                var res = objOperations;
+                if (res == true) {
+                    $("#Resum").text("REMOVE RESUME");
+                }
+                if (res == false) {
+                   $("#Resum").text("SEND RESUME");
+                }
+            },
+
+              beforeSend: function () {
+
+                    LoaderJS();
+                },
+                complete: function () {
+
+                    HideLoaderJS();
+                },
+
+        });
+    };
+
+</script>
+
+@*/@User.Identity.GetUserId()/@Model.job.ID'*@
+

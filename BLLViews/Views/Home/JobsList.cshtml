@@ -1,0 +1,181 @@
+﻿@model BLLViews.Models.JobsListModel
+@{
+    ViewBag.Title = "JobsList";
+}
+
+<style>
+    .body{
+        padding-top: 1px !important;
+        
+    }
+    a {
+        color: white;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .style_list {
+        top: 1rem;
+    }
+
+    .style_item {
+        margin: 15px;
+        padding: 5px;
+        border-style: solid;
+        border-width: 2px;
+        border-color: darkred;
+        transition:  background 0.2s linear,border-radius 0.25s ease-out;
+      
+    }
+        .style_item:hover {
+            cursor: pointer;
+            border-radius: 20px;
+            background: #042949;
+        }
+
+        .btn-create{
+            width: 80%;
+        }
+        .box{
+            justify-content: center;
+        }
+        .text{
+            font-size: 2rem !important;
+            height: 4rem !important;
+            margin-left:1.8rem;
+            padding: 5px;
+            border-style: solid;
+            border-width: 2px;
+            border-color: darkred;
+            transition:  background 0.2s linear,border-radius 0.25s ease-out;
+        }
+</style>
+
+
+<br />
+<div class="container">
+    <h1 class="text-center"> JobsList</h1>
+    <div class="row">
+
+        <div class="cell-12" style="margin-bottom: 20px">
+            @Html.TextBox("searchtextbox", "", new { type = "text", @class = " text", placeholder="Search", id = "search" })
+        </div>
+    </div>
+
+
+
+    <div class="container style_list">
+        <div class="row">
+            <div class="cell-2 d-flex  flex-justify-center" style="margin-left:1rem">
+                @Html.ActionLink("Create Job", "CreateJobs", "Home", new { @class = "button alert outline left-button cell-12" })
+            </div>
+            <div class="cell-4">
+                <select data-prepend="Categorie" data-role="select" id="CTFilter">
+                    <option value="ALL">ALL</option>
+                    @foreach (var el in Model.Categories)
+                    {
+                        <option value="@el.Name">@el.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="cell-4">
+                <select data-prepend="City" data-role="select" id="CFilter">
+                    <option value="ALL">ALL</option>
+                    @foreach (var el in Model.Cities)
+                    {
+
+                        <option value="@el.Name">@el.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div id="scrolList">
+            @Html.Partial("_Items", Model)
+        </div>
+
+    </div>
+
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        let pageNo = 1;
+
+        
+      
+
+
+        function loadData(text,filter) {
+            
+            $.ajax({
+                url: '/Home/JobsList/',
+                data: { search: text, page: pageNo, Filter: filter },
+                success: function(data) {
+
+                    $("#scrolList").append(data);
+                    pageNo++;
+                },
+                beforeSend: function () {
+
+                    LoaderJS();
+                },
+                complete: function () {
+
+                    HideLoaderJS();
+                },
+               
+            });
+        }
+        
+        $("#CFilter").change(function () {
+            var name = $("#CFilter").val();
+            if (name != "ALL") {
+                name = "city=" + name;
+                $("#scrolList").empty();
+                loadData("null", name);
+            }
+            else {
+                loadData(" ");
+            }
+
+        });
+        $("#CTFilter").change(function () {
+            var name = $("#CTFilter").val();
+            if (name != "ALL") {
+                name = "category=" + name;
+                $("#scrolList").empty();
+                loadData("null", name);
+            }
+            else {
+                loadData(" ");
+            }
+
+        });
+        var searchData = "";
+
+        $(document).on("scroll",function () {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+
+                loadData(searchData);
+
+            }
+        });
+
+        
+
+        $("#search").on("input", function () {
+            pageNo = 0;
+            $("#scrolList").empty();
+            searchData = $("#search").val();
+            loadData(searchData);
+        })  
+    </script>
+}
+
+
+

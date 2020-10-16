@@ -1,0 +1,25 @@
+﻿@model BLLViews.Models.IndexModel
+@{
+    /**/
+
+    ViewBag.Title = "Adminka";
+}
+
+<div class="container">
+
+    <div id="AllUsers">
+        @Html.Action("GetUsers")
+    </div>
+
+
+
+
+    <div id="Test">
+        @Html.Partial("_BanPanel", Model.partialBanModel)
+
+    </div>
+
+</div>
+
+
+
