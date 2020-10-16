@@ -19,7 +19,7 @@ namespace BLLViews.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+        //
         public AccountController()
         {
         }
